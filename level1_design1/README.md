@@ -1,8 +1,9 @@
+
 # MUX Design Verification
 
 The verification environment is setup using [Vyoma's UpTickPro](https://vyomasystems.com) provided for the hackathon.
+![gitpod screenshot](https://user-images.githubusercontent.com/92357357/180269862-b4acdb6d-cfe1-4da7-bf00-b5ace04ed753.PNG)
 
-![](gitpod screenshot.PNG)
 
 ## Verification Environment
 
@@ -117,7 +118,6 @@ Updated design
       default: out = 0;
     endcase
 
-![](image.png)
 
 The updated design is checked in as level1_design1_bugfree/mux.v
 
