@@ -11,7 +11,8 @@ async def test_mux_nonbuggy(dut):
     cocotb.log.info('##### CTB: Develop your test here ########')
     
     
-    for sel in range(0,31):
+    for sel in range(0,45):
+        sel = random.randint(0,31)
         dut.sel.value = sel
         dut.inp1.value = random.randint(1,3)
         dut.inp2.value = random.randint(1,3)
@@ -25,6 +26,8 @@ async def test_mux_nonbuggy(dut):
         dut.inp9.value = random.randint(1,3)
         dut.inp10.value = random.randint(1,3)
         dut.inp11.value = random.randint(1,3)
+        dut.inp12.value = random.randint(1,3)
+        dut.inp13.value = random.randint(1,3)
         dut.inp14.value = random.randint(1,3)
         dut.inp15.value = random.randint(1,3)
         dut.inp16.value = random.randint(1,3)
@@ -189,7 +192,7 @@ async def test_mux_nonbuggy(dut):
                 sel=dut.sel.value, expected = out, output=dut.out.value)
 
         elif sel == 26:
-            out = dut.inp8.value
+            out = dut.inp26.value
             dut._log.info("sel = %d , expected output = %d  actual output = %d", sel, out, dut.out.value)
             assert out == dut.out.value ,"the expected output for input sel line {sel} is {expected} but the design value is {output}".format(
                 sel=dut.sel.value, expected = out, output=dut.out.value)
@@ -218,3 +221,9 @@ async def test_mux_nonbuggy(dut):
             dut._log.info("sel = %d , expected output = %d  actual output = %d", sel, out, dut.out.value)
             assert out == dut.out.value ,"the expected output for input sel line {sel} is {expected} but the design value is {output}".format(
                 sel=dut.sel.value, expected = out, output=dut.out.value)
+        else :
+            out = 0
+            dut._log.info("sel = %d , expected output = %d  actual output = %d", sel, out, dut.out.value)
+            assert out == dut.out.value ,"the expected output for input sel line {sel} is {expected} but the design value is {output}".format(
+                sel=dut.sel.value, expected = out, output=dut.out.value)
+
