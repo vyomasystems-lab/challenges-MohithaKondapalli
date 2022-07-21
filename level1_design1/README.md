@@ -2,7 +2,7 @@
 
 The verification environment is setup using [Vyoma's UpTickPro](https://vyomasystems.com) provided for the hackathon.
 
-gitpod screenshot.PNG
+![](gitpod screenshot.PNG)
 
 ## Verification Environment
 
@@ -18,7 +18,7 @@ dut.inp1.value = random.ranint(1,3)
 .
 dut.inp31.value= random.ranint(1,3)
 ```
-image.png
+![](image.png)
 
 The assert statement is used for comparing the mux output to the expected value.
 
@@ -41,24 +41,24 @@ assert out == dut.out.value ,"the expected output for input sel line {sel} is {e
 - Test Inputs: sel = 12, inp12 = 2
 - Expected Output: out = 2
 - Observed Output in the DUT dut.out=0
-image.png
+![](image.png)
 ## Test Scenario
 - Test Inputs: sel = 13, inp30 = 3
 - Expected Output: out = 3
 - Observed Output in the DUT dut.out=2
 This senario apperas as the case 5'b01101 is written twice 
-image.png
+![](image.png)
 ## Test Scenario
 - Test Inputs: sel = 30, inp30 = 3
 - Expected Output: out = 3
 - Observed Output in the DUT dut.out=0
-image.png
+![](image.png)
 
 
-Output mismatches for the above inputs proving that there are two design bugs
+Output mismatches for the above inputs proves that there are two design bugs
 
 ## Design Bugs
-Based on the above test input and analysing the design, we see the following
+Based on the above test input and analysing the design, we see the following bugs
 
 ```
 5'b01010: out = inp10;
@@ -117,7 +117,7 @@ Updated design
       default: out = 0;
     endcase
 
-image.png
+![](image.png)
 
 The updated design is checked in as level1_design1_bugfree/mux.v
 
