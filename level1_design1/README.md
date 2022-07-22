@@ -19,10 +19,10 @@ dut.inp1.value = random.ranint(1,3)
 .
 dut.inp31.value= random.ranint(1,3)
 ```
-![](image.png)
+![image](https://user-images.githubusercontent.com/92357357/180451668-6fbb6f76-e0c0-4fa4-9564-22dce3d9a415.png)
+
 
 The assert statement is used for comparing the mux output to the expected value.
-
 
 
 The following errors are seen:
@@ -38,22 +38,25 @@ assert out == dut.out.value ,"the expected output for input sel line {sel} is {e
 
 
 ```
-## Test Scenario **(Important)**
+## Test Scenario1 
 - Test Inputs: sel = 12, inp12 = 2
 - Expected Output: out = 2
 - Observed Output in the DUT dut.out=0
-![](image.png)
-## Test Scenario
+![image](https://user-images.githubusercontent.com/92357357/180450336-ddba2411-9d4b-49fd-b626-2e19b0839410.png)
+
+## Test Scenario2
 - Test Inputs: sel = 13, inp30 = 3
 - Expected Output: out = 3
 - Observed Output in the DUT dut.out=2
 This senario apperas as the case 5'b01101 is written twice 
-![](image.png)
-## Test Scenario
+![image](https://user-images.githubusercontent.com/92357357/180450194-9fa55a6c-99a0-4405-a923-dfba6dad74ef.png)
+
+## Test Scenario3
 - Test Inputs: sel = 30, inp30 = 3
 - Expected Output: out = 3
 - Observed Output in the DUT dut.out=0
-![](image.png)
+This senario appears as there is no case statement written in the design for sel input 30
+![image](https://user-images.githubusercontent.com/92357357/180450456-7a4cb88b-e9e8-4092-8d2f-60780da9bec2.png)
 
 
 Output mismatches for the above inputs proves that there are two design bugs
@@ -73,7 +76,7 @@ In the  design, the case statement for both inp12 and inp13 is same as 5'b01101 
 ```
 5'b11011: out = inp27;
 5'b11100: out = inp28;
-5'b11101: out = inp29;
+5'b11101: out = inp29;      ====>need to add case for sel input 30
 default: out = 0;
 ```
 In the  design, the case statement for sel input 11110 is not defined. hence it is giving the default output value.  it should be defined as ``5'b11110 : out = inp30`` . 
@@ -81,6 +84,9 @@ In the  design, the case statement for sel input 11110 is not defined. hence it 
 
 ## Design Fix
 Updating the design and re-running the test makes the test pass.
+
+![image](https://user-images.githubusercontent.com/92357357/180451446-7e2b312a-49a6-4f17-ae8e-e74065a34447.png)
+
 
 Updated design
  case(sel)
@@ -96,7 +102,7 @@ Updated design
       5'b01001: out = inp9;  
       5'b01010: out = inp10;
       5'b01011: out = inp11;
-      5'b01100: out = inp12;
+      5'b01100: out = inp12;       ====>changed
       5'b01101: out = inp13;
       5'b01110: out = inp14;
       5'b01111: out = inp15;
@@ -114,12 +120,14 @@ Updated design
       5'b11011: out = inp27;
       5'b11100: out = inp28;
       5'b11101: out = inp29;
-      5'b11110: out = inp30;
+      5'b11110: out = inp30;     ======>added
       default: out = 0;
     endcase
+    
+    
 
 
-The updated design is checked in as level1_design1_bugfree/mux.v
+The updated design is checked in as level1_design1_bugfree/mux_fix.v
 
 ## Verification Strategy
 
