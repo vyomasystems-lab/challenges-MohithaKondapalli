@@ -46,7 +46,7 @@ async def test_seq_random(dut):
                    # dut._log.info("inp_bit = %d, next_state = %d, seq_seen = %d",inp_bit, dut.next_state.value, dut.seq_seen.value)
                     #print("pattern detected")
                     
-                assert ut.seq_seen.value == seq_seen,"sequence not detected with {inp_bit}, {current_state}, {seq_see}".format(inp_bit, dut.current_state.value, dut.seq_seen.value)
+                assert dut.seq_seen.value == seq_seen, "sequence not detected"
                 #else:
                     #dut._log.info("inp_bit = %d, current_state = %d, seq_seen = %d", inp_bit, dut.current_state.value, dut.seq_seen.value)
                     #print("patter not detected")
@@ -59,3 +59,61 @@ async def test_seq_random(dut):
                 #print(queue)
   
 
+
+
+@cocotb.test()
+async def test_seq_10101110111011(dut):
+    """Test for seq detection """
+
+    clock = Clock(dut.clk, 10, units="us")  # Create a 10us period clock on port clk
+    cocotb.start_soon(clock.start())        # Start the clock
+
+    # reset
+    dut.reset.value = 1
+    await FallingEdge(dut.clk)  
+    dut.reset.value = 0
+    await FallingEdge(dut.clk)
+
+    cocotb.log.info('#### CTB: Develop your test here! ######')
+    await RisingEdge(dut.clk)
+    dut.inp_bit.value = 1
+    dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
+    await RisingEdge(dut.clk)
+    dut.inp_bit.value = 0
+    dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
+    await RisingEdge(dut.clk)
+    dut.inp_bit.value = 1
+    dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
+    await RisingEdge(dut.clk)
+    dut.inp_bit.value = 0
+    dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
+    await RisingEdge(dut.clk)
+    dut.inp_bit.value = 1
+    dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
+    await RisingEdge(dut.clk)
+    dut.inp_bit.value = 1
+    dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
+    await RisingEdge(dut.clk)
+    dut.inp_bit.value = 1
+    dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
+    await RisingEdge(dut.clk)
+    dut.inp_bit.value = 0
+    dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
+    await RisingEdge(dut.clk)
+    dut.inp_bit.value = 1
+    dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
+    await RisingEdge(dut.clk)
+    dut.inp_bit.value = 1
+    dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
+    await RisingEdge(dut.clk)
+    dut.inp_bit.value = 1
+    dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
+    await RisingEdge(dut.clk)
+    dut.inp_bit.value = 0
+    dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
+    await RisingEdge(dut.clk)
+    dut.inp_bit.value = 1
+    dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
+    await RisingEdge(dut.clk)
+    dut.inp_bit.value = 1
+    dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
