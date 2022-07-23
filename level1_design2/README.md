@@ -24,24 +24,44 @@ assert dut.seq_seen == 1,"sequence not detected"
 
 The following errors are seen:
 ```
+ 1. for input values 10111011101110
  AssertionError:  2nd sequence not detected in 10111011101110
-                    
+ 
+ 2. for input values 1010110110110
+  assert dut.seq_seen == 1," 1stsequence not detected in 1010110110110"
+                     AssertionError:  1stsequence not detected in 1010110110110
+             
+ 3. assert dut.seq_seen == 1," 1stsequence not detected in 110111011"
+                     AssertionError:  1stsequence not detected in 110111011
  
 ```
 ## Test Scenario1 
-- Test Input: 10111011101110
+- Test Input:10111011101110
 - Expected Output: seq_seen = 00001000100001 
-- Observed Output in the DUT dut.out=0000100000001
+- Observed Output in the DUT seq_seen=0000100000001
 
 ![image](https://user-images.githubusercontent.com/92357357/180616298-d93869ca-f01e-4d75-9886-9a5705f03e4c.png)
 
+## Test Scenario2
+
+- Test Input:  1010110110110
+- Expected Output: seq_seen = 0000001000000 
+- Observed Output in the DUT seq_seen=000000000000
+![image](https://user-images.githubusercontent.com/92357357/180617932-133f2b6a-b106-44dc-ba0d-1091eb782041.png)
+
+## Test Senario3
+- Test Input:  110111011
+- Expected Output: seq_seen = 0000010001 
+- Observed Output in the DUT seq_seen=000000001
+- 
+![image](https://user-images.githubusercontent.com/92357357/180618575-e34b3641-40dc-4b3e-a3b7-471ad8904626.png)
 
 
-Output mismatches for the above inputs proves that there are two design bugs
+Output mismatches for the above inputs proves that there are three design bugs
 
 ## Design Bugs
 Based on the above test input and analysing the design, we see the following bugs
-
+1.
 ```
  SEQ_1011:
       begin
@@ -50,12 +70,42 @@ Based on the above test input and analysing the design, we see the following bug
 ```
 In the  design, when the FSM is in SEQ_1011. If inp_bit = 1 it should go to SEQ_1 state but here its is going to IDLE state irrespective of the input hence adjacent sequence is not detected.
 
+2.
+```
+SEQ_101:
+      begin
+        if(inp_bit == 1)
+          next_state = SEQ_1011;
+        else
+          next_state = IDLE;   ===>BUG
+      end
+ ```       
+When FSM is in SEQ_101 state. if input is 1 it shold goto next state i.e, SEQ_1011 otherwise it should go to SEQ_1 but here its going to IDLE state
 
+3. SEQ_1:
+      begin
+        if(inp_bit == 1)
+          next_state = IDLE;   ===>BUG
+        else
+          next_state = SEQ_10;
+          
+ When FSM is in state SEQ_1 . if input 1s 1 then it should remain in the same state but here next_state is IDLE.
 
 ## Design Fix
-Updating the design and re-running the test makes the test pass.
+Updated the design for testsenario and issues are fixed
 
-![image](https://user-images.githubusercontent.com/92357357/180616665-b20b0969-5419-4dbc-8d80-7bc79aebad52.png)
+![image](https://user-images.githubusercontent.com/92357357/180617803-ed161508-cfa2-4ea7-868f-230da5e37c57.png)
+
+Updated the design according to the testsenario 2 and issue is fixed
+
+![image](https://user-images.githubusercontent.com/92357357/180618119-bb340d43-8076-46ad-a87e-3121deb594b2.png)
+
+Updated The design according to test senario3 and the issue is fixed
+
+![image](https://user-images.githubusercontent.com/92357357/180618778-789cb0b9-ba6a-4457-9bef-6cfc30afba00.png)
+
+
+
 
 
 Updated design:
