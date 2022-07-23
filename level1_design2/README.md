@@ -82,13 +82,15 @@ SEQ_101:
  ```       
 When FSM is in SEQ_101 state. if input is 1 it shold goto next state i.e, SEQ_1011 otherwise it should go to SEQ_1 but here its going to IDLE state
 
-3. SEQ_1:
+3.
+```
+ SEQ_1:
       begin
         if(inp_bit == 1)
           next_state = IDLE;   ===>BUG
         else
           next_state = SEQ_10;
-          
+  ```        
  When FSM is in state SEQ_1 . if input 1s 1 then it should remain in the same state but here next_state is IDLE.
 
 ## Design Fix
@@ -104,21 +106,52 @@ Updated The design according to test senario3 and the issue is fixed
 
 ![image](https://user-images.githubusercontent.com/92357357/180618778-789cb0b9-ba6a-4457-9bef-6cfc30afba00.png)
 
+Upon running the testcases with random input bit after the design fix 
 
-
-
+![image](https://user-images.githubusercontent.com/92357357/180619876-3670ae9c-7d38-480a-8bde-f4ba0be51e80.png)
 
 Updated design:
-
-SEQ_1011:
+```
+always @(inp_bit or current_state)
+  begin
+    case(current_state)
+      IDLE:
+      begin
+        if(inp_bit == 1)
+          next_state = SEQ_1;
+        else
+          next_state = IDLE;
+      end
+      SEQ_1:
+      begin
+        if(inp_bit == 1)
+          next_state = SEQ_1;
+        else
+          next_state = SEQ_10;
+      end
+      SEQ_10:
+      begin
+        if(inp_bit == 1)
+          next_state = SEQ_101;
+        else
+          next_state = IDLE;
+      end
+      SEQ_101:
+      begin
+        if(inp_bit == 1)
+          next_state = SEQ_1011;
+        else
+          next_state = SEQ_10;
+      end
+      SEQ_1011:
       begin
         if(inp_bit == 0)
           next_state = IDLE;
         else
           next_state = SEQ_1;
       end
-    
-    
+    endcase
+ ```   
 The updated design is checked in as level1_design2_bugfree/seq_detect_1011_fix.v
 
 ## Verification Strategy
