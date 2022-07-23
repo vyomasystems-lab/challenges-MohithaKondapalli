@@ -24,9 +24,16 @@ async def test_seq_bug1(dut):
     await FallingEdge(dut.clk)
 
     cocotb.log.info('#### CTB: Develop your test here! ######')
+    queue = []
     for i in range(0,10):
-        await RaisingEdge(dut.clk)
-        inp_bit = random.randbit()
+        await RisingEdge(dut.clk)
+        inp_bit = random.getrandbits(1)
         dut.inp_bit.value = inp_bit
+        queue.append(inp_bit)
+    dut._log.i
+    if queue[0]
+
+
+
     
     
