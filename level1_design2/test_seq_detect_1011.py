@@ -30,8 +30,20 @@ async def test_seq_bug1(dut):
         inp_bit = random.getrandbits(1)
         dut.inp_bit.value = inp_bit
         queue.append(inp_bit)
-    dut._log.i
-    if queue[0]
+    dut._log.info("queue = %b", queue)
+
+    for 
+    if queue[0] == 1:
+        queue.pop()
+        if queue[0] == 0:
+            queuue.pop()
+            if queue[0] == 1:
+                queuue.pop()
+                if queue[0] == 0:
+                     queuue.pop()
+                     assert dut.seq_seen == 1, "sequence not detected"
+        
+          
 
 
 
