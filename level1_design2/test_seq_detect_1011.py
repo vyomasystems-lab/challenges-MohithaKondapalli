@@ -11,7 +11,7 @@ from cocotb.clock import Clock
 from cocotb.triggers import RisingEdge, FallingEdge
 
 @cocotb.test()
-async def test_seq_bug1(dut):
+async def test_seq_random(dut):
     """Test for seq detection """
 
     clock = Clock(dut.clk, 10, units="us")  # Create a 10us period clock on port clk
@@ -27,23 +27,34 @@ async def test_seq_bug1(dut):
     queue = []
     for i in range(0,10):
         await RisingEdge(dut.clk)
-        inp_bit = random.getrandbits(1)
+        inp_bit = random.randint(0,1)
         dut.inp_bit.value = inp_bit
+        dut._log.info("reset = %d, inp_bit = %d, next_state = %d, seq_seen = %d", dut.reset.value, inp_bit,dut.next_state, dut.seq_seen)
         queue.append(inp_bit)
-    dut._log.info("queue = %b", queue)
+        #print(inp_bit)
+        while (len(queue)> 3):
 
-    for 
-    if queue[0] == 1:
-        queue.pop()
-        if queue[0] == 0:
-            queuue.pop()
-            if queue[0] == 1:
-                queuue.pop()
-                if queue[0] == 0:
-                     queuue.pop()
-                     assert dut.seq_seen == 1, "sequence not detected"
-        
-          
+            if((queue[0:4]) == [1,0,1,1]):
+                queue.pop(0)
+                queue.pop(0)
+                queue.pop(0)
+                queue.pop(0)
+                #print(queue)
+                await RisingEdge(dut.clk)
+                if dut.seq_seen.value != 1 :
+                    dut._log.info("if patter seen at inp_bit = %d, current_state = %d, seq_seen = %d", inp_bit,dut.current_state.value, dut.seq_seen.value)
+                    assert dut.seq_seen == 1,"sequence not detected"
+                    #print("sequence not detected")
+             
+            else:
+                queue.pop(0)
+                #print(queue)
+  
+
+    print("simulation done")
+
+
+    
 
 
 
