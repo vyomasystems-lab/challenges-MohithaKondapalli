@@ -202,7 +202,6 @@ async def test_seq_random(dut):
         await RisingEdge(dut.clk)
         inp_bit = random.randint(0,1)
         dut.inp_bit.value = inp_bit
-        dut._log.info("reset = %d, inp_bit = %d, current_state = %d, next_state = %d, seq_seen = %d", dut.reset.value, inp_bit, dut.current_state.value, dut.next_state, dut.seq_seen)
         queue.append(inp_bit)
         print(queue)
         while (len(queue)> 3):
@@ -213,16 +212,17 @@ async def test_seq_random(dut):
                 queue.pop(0)
                 queue.pop(0)
                 #print(queue)
-                await RisingEdge(dut.clk)
+                
                 await RisingEdge(dut.clk)
                 #if dut.seq_seen.value != 1 :
-                dut._log.info("seq_seen should be one but it is %d", dut.seq_seen.value)
+                print("sequence shold be one")
+                await RisingEdge(dut.clk)
+                dut._log.info("reset = %d, inp_bit = %d, current_state = %d, next_state = %d, seq_seen = %d", dut.reset.value, inp_bit, dut.current_state.value, dut.next_state, dut.seq_seen)
                 assert dut.seq_seen == 1,"sequence not detected"
                     #print("sequence not detected")
-            elif(len(queue)<5):
-                print("no sequence in the input bits")
 
             else:
                 queue.pop(0)
                 #print(queue)
+  
   
