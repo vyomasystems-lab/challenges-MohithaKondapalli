@@ -228,7 +228,7 @@ async def test_seq_1110111011(dut):
     dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
     
 
-##RANDOM TESTCASE
+##Self Checking
 @cocotb.test()
 async def test_seq_random(dut):
     """Test for seq detection """
