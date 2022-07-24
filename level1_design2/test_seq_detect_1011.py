@@ -27,7 +27,6 @@ async def test_seq_101111011101110(dut):
     cocotb.log.info('#### CTB: Develop your test here! ######')
     await RisingEdge(dut.clk)
     dut.inp_bit.value = 1
-    dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
     await RisingEdge(dut.clk)
     dut.inp_bit.value = 0
     dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
@@ -167,8 +166,8 @@ async def test_seq_1110111011(dut):
     dut.inp_bit.value = 1
     dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
     await RisingEdge(dut.clk)
-    assert dut.seq_seen == 1,"sequence not detected"
     dut.inp_bit.value = 0
+    assert dut.seq_seen == 1,"sequence not detected"
     dut._log.info("inp_bit= %d, next_state= %d, seq_seen = %d", dut.inp_bit.value, dut.next_state.value, dut.seq_seen.value)
     await RisingEdge(dut.clk)
     dut.inp_bit.value = 1
@@ -216,7 +215,7 @@ async def test_seq_random(dut):
                 #print(queue)
                 await RisingEdge(dut.clk)
                 if dut.seq_seen.value != 1 :
-                    dut._log.info("if patter seen at inp_bit = %d, current_state = %d, seq_seen = %d", inp_bit,dut.current_state.value, dut.seq_seen.value)
+                    dut._log.info("if pattern seen at inp_bit = %d, current_state = %d, seq_seen = %d", inp_bit,dut.current_state.value, dut.seq_seen.value)
                     assert dut.seq_seen == 1,"sequence not detected"
                     #print("sequence not detected")
              
@@ -224,7 +223,7 @@ async def test_seq_random(dut):
                 queue.pop(0)
                 #print(queue)
   
-"""
+
 
 
 
