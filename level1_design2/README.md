@@ -108,7 +108,7 @@ Updated The design according to test senario3 and the issue is fixed
 
 Upon running the testcases with random input bit after the design fix 
 
-![image](https://user-images.githubusercontent.com/92357357/180619876-3670ae9c-7d38-480a-8bde-f4ba0be51e80.png)
+![image](https://user-images.githubusercontent.com/92357357/180638687-52aca1b2-83fa-476b-85b2-3fbfd2d3e75e.png)
 
 Updated design:
 ```
