@@ -40,8 +40,8 @@ module seq_detect_1011(seq_seen, inp_bit, reset, clk);
       begin
         if(inp_bit == 1)
           next_state = SEQ_1;
-        //else
-          //next_state = IDLE;
+        else
+          next_state = IDLE;
       end
       SEQ_1:
       begin
