@@ -35,19 +35,24 @@ def run_test(dut):
     ######### CTB : Modify the test to expose the bug #############
     # input transaction
 
-    count = 0
-    for i in range(0,100):
+    count = 0   # varaible is used to count the errors 
+    #list of all the instructions
 
-        mav_putvalue_src1 =  random.getrandbits(32) #0x5
+    list1 = [0x4005013, 0x4005033, 0x4001033, 0x6005033, 0x6001033,
+    0x68005013, 0x28005013, 0x48005013, 0x68001013, 0x28001013,0x48001013,
+    0x60005013, 0x20005013, 0x20001013,
+    0x68005033, 0x28005033, 0x48005033, 0x68001033, 0x28001033, 0x48001033,
+    0x60005033, 0x60001033, 0x20005033, 0x20001033, 0x40004033, 0x40007033, 0x40006033]
+    for i in range(0,5):
+        mav_putvalue_src1 =  random.getrandbits(32) 
         dut._log.info(f'mav_putvalue_src1={hex(mav_putvalue_src1)}')
-        mav_putvalue_src2 = random.getrandbits(32) #0x0
+        mav_putvalue_src2 = random.getrandbits(32) 
         dut._log.info(f'mav_putvalue_src2={hex(mav_putvalue_src2)}')
-        mav_putvalue_src3 = random.getrandbits(32) #0x0
+        mav_putvalue_src3 = random.getrandbits(32) 
         dut._log.info(f'mav_putvalue_src3={hex(mav_putvalue_src3)}')
 
-        for j in range(1,30):
-
-            mav_putvalue_instr = random.getrandbits(32)
+        for j in list1:
+            mav_putvalue_instr = j
             dut._log.info(f'mav_putvalue_instr={hex(mav_putvalue_instr)}')
 
             # expected output from the model
@@ -65,7 +70,7 @@ def run_test(dut):
             # obtaining the output
             dut_output = dut.mav_putvalue.value
 
-            cocotb.log.info(f'DUT OUTPUT={hex(dut_output)}')
+            cocotb.log.info(f'DUT OUTPUT={hex(dut_output.value)}')
             cocotb.log.info(f'EXPECTED OUTPUT={hex(expected_mav_putvalue)}')
 
             # comparison
@@ -76,5 +81,8 @@ def run_test(dut):
             else:
                 count = count
 
-      
-    assert count == 0, "failed in some cases"
+            
+
+
+    print(count)  
+    assert count == 0, "Failed as error_count > 0"
