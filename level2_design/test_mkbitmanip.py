@@ -34,10 +34,14 @@ def run_test(dut):
 
     ######### CTB : Modify the test to expose the bug #############
     # input transaction
-    mav_putvalue_src1 = 0x5
-    mav_putvalue_src2 = 0x0
-    mav_putvalue_src3 = 0x0
-    mav_putvalue_instr = 0x101010B3
+    mav_putvalue_src1 =  random.getrandbits(32) #0x5
+    dut._log.info(f'mav_putvalue_src1={hex(mav_putvalue_src1)}')
+    mav_putvalue_src2 = random.getrandbits(32) #0x0
+    dut._log.info(f'mav_putvalue_src2={hex(mav_putvalue_src2)}')
+    mav_putvalue_src3 = random.getrandbits(32) #0x0
+    dut._log.info(f'mav_putvalue_src3={hex(mav_putvalue_src3)}')
+    mav_putvalue_instr = 0x28005033
+    dut._log.info(f'mav_putvalue_instr={hex(mav_putvalue_instr)}')
 
     # expected output from the model
     expected_mav_putvalue = bitmanip(mav_putvalue_instr, mav_putvalue_src1, mav_putvalue_src2, mav_putvalue_src3)
@@ -58,5 +62,5 @@ def run_test(dut):
     cocotb.log.info(f'EXPECTED OUTPUT={hex(expected_mav_putvalue)}')
     
     # comparison
-    error_message = f'Value mismatch DUT = {hex(dut_output)} does not match MODEL = {hex(expected_mav_putvalue)}'
+    error_message = f'Value mismatch DUT = {bin(dut_output)} does not match MODEL = {hex(expected_mav_putvalue)}'
     assert dut_output == expected_mav_putvalue, error_message
