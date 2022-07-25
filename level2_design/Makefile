@@ -10,8 +10,8 @@ VERILOG_SOURCES = $(PWD)/mkbitmanip.v
 
 TOPLEVEL := mkbitmanip        # design
 #MODULE   := test_mkbitmanip   # test
-#MODULE   := self_checking_test
-MODULE   := trail
+MODULE   := self_checking_test
+
 
 include $(shell cocotb-config --makefiles)/Makefile.sim
 
