@@ -36,6 +36,8 @@ def run_test(dut):
     # input transaction
 
     count = 0   # varaible is used to count the errors 
+
+
     #list of all the instructions
 
     list1 = [0x4005013, 0x4005033, 0x4001033, 0x6005033, 0x6001033,
@@ -43,17 +45,17 @@ def run_test(dut):
     0x60005013, 0x20005013, 0x20001013,
     0x68005033, 0x28005033, 0x48005033, 0x68001033, 0x28001033, 0x48001033,
     0x60005033, 0x60001033, 0x20005033, 0x20001033, 0x40004033, 0x40007033, 0x40006033]
-    for i in range(0,5):
+    for i in range(0,100):
         mav_putvalue_src1 =  random.getrandbits(32) 
-        dut._log.info(f'mav_putvalue_src1={hex(mav_putvalue_src1)}')
+        #dut._log.info(f'mav_putvalue_src1={hex(mav_putvalue_src1)}')
         mav_putvalue_src2 = random.getrandbits(32) 
-        dut._log.info(f'mav_putvalue_src2={hex(mav_putvalue_src2)}')
+        #dut._log.info(f'mav_putvalue_src2={hex(mav_putvalue_src2)}')
         mav_putvalue_src3 = random.getrandbits(32) 
-        dut._log.info(f'mav_putvalue_src3={hex(mav_putvalue_src3)}')
+        #dut._log.info(f'mav_putvalue_src3={hex(mav_putvalue_src3)}')
 
-        for j in list1:
-            mav_putvalue_instr = j
-            dut._log.info(f'mav_putvalue_instr={hex(mav_putvalue_instr)}')
+        for val in list1:
+            mav_putvalue_instr = val
+            #dut._log.info(f'mav_putvalue_instr={hex(mav_putvalue_instr)}')
 
             # expected output from the model
             expected_mav_putvalue = bitmanip(mav_putvalue_instr, mav_putvalue_src1, mav_putvalue_src2, mav_putvalue_src3)
@@ -65,13 +67,13 @@ def run_test(dut):
             dut.EN_mav_putvalue.value = 1
             dut.mav_putvalue_instr.value = mav_putvalue_instr
   
-            yield Timer(1) 
+            yield Timer(2) 
 
             # obtaining the output
             dut_output = dut.mav_putvalue.value
 
-            cocotb.log.info(f'DUT OUTPUT={hex(dut_output.value)}')
-            cocotb.log.info(f'EXPECTED OUTPUT={hex(expected_mav_putvalue)}')
+            #cocotb.log.info(f'DUT OUTPUT={hex(dut_output)}')
+            #cocotb.log.info(f'EXPECTED OUTPUT={hex(expected_mav_putvalue)}')
 
             # comparison
             if(dut_output != expected_mav_putvalue):
@@ -80,9 +82,9 @@ def run_test(dut):
                 count = count+1
             else:
                 count = count
-
+    
             
 
 
-    print(count)  
+    print(val_count)  
     assert count == 0, "Failed as error_count > 0"
