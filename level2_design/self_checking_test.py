@@ -86,5 +86,5 @@ def run_test(dut):
             
 
 
-    print(val_count)  
+    print(count)  
     assert count == 0, "Failed as error_count > 0"
