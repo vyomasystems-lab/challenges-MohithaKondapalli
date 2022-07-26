@@ -44,7 +44,7 @@ def run_test(dut):
     0x68005013, 0x28005013, 0x48005013, 0x68001013, 0x28001013,0x48001013,
     0x60005013, 0x20005013, 0x20001013,
     0x68005033, 0x28005033, 0x48005033, 0x68001033, 0x28001033, 0x48001033,
-    0x60005033, 0x60001033, 0x20005033, 0x20001033, 0x40004033, 0x40007033, 0x40006033]
+    0x60005033, 0x60001033, 0x20005033, 0x20001033, 0x40004033, 0x40007033, 0x40006033, 0x00001111]
     for i in range(0,100):
         mav_putvalue_src1 =  random.getrandbits(32) 
         #dut._log.info(f'mav_putvalue_src1={hex(mav_putvalue_src1)}')
@@ -67,7 +67,7 @@ def run_test(dut):
             dut.EN_mav_putvalue.value = 1
             dut.mav_putvalue_instr.value = mav_putvalue_instr
   
-            yield Timer(2) 
+            yield Timer(1) 
 
             # obtaining the output
             dut_output = dut.mav_putvalue.value

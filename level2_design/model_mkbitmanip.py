@@ -768,7 +768,7 @@ def bitmanip(mav_putvalue_instr, mav_putvalue_src1,mav_putvalue_src2, mav_putval
 
 
 
-    #print('--INVALID ')
+    print('--INVALID ')
     return 0
 
 

@@ -71,7 +71,7 @@ async def test_mux_buggy(dut):
     cocotb.log.info('##### CTB: Develop your test here ########')
     
     
-    for i in range(0,10):
+    for i in range(0,30):
 
         #driving the inputs to dut
 
