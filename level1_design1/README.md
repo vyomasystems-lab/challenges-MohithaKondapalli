@@ -77,7 +77,7 @@ Based on the above test input and analysing the design, we see the following bug
 5'b01101: out = inp13;
 5'b01110: out = inp14;
 ```
-In the  design, the case statement for  inp12 is `5'b01101: out = inp12``  it should be ``5'b01100 : out = inp12``
+In the  design, the case statement for  inp12 is ``5'b01101: out = inp12``  it should be ``5'b01100 : out = inp12``
 
 ```
 5'b11011: out = inp27;
@@ -137,8 +137,9 @@ The updated design is checked in as level1_design1/level1_design1_bugfree/mux_fi
 
 ## Verification Strategy
 
-I used a for loop and assigned random values to all the inputs. The range for  for loop is greater the maximum value to the sel input so that all the sel input values are covered and desiged verification is complete . As assert statement is used to find the bug in the design, on running the test its gets terminated if error is detected. so when any error is detected i have go through the output values and the expected values to analyze the design and made changes in the design accordingly and made sure that the design is working properly now . The process is repeated until all the bugs are found and resolved and made sure that the design is covering all the possible input values as its a simple design.
+I used a for loop and assigned random values to all the inputs. If loops are used within the for loop to define the model of design and an assert statement is used to expose the bug in the design by comapring the expected and the actual output value, on running the test its gets terminated if error is detected. so when any error is detected i have go through the output values and the expected values to analyze the design and made changes in the design accordingly and made sure that the design is working properly now . The process is repeated until all the bugs are found and resolved and made sure that the design is covering all the possible input values as its a simple design.
 
 ## Is the verification complete ?
 
-I think my verification is complete as i made sure that the design is working properly for all the possible inputs.
+The verification is complete as the test case designed is made to run on all possible input values and also made sure that the design is working properly for all the
+inputs.
