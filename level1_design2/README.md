@@ -36,23 +36,23 @@ The following errors are seen:
  
 ```
 ## Test Scenario1 
-- Test Input:10111011101110
-- Expected Output: seq_seen = 00001000100001 
-- Observed Output in the DUT seq_seen=0000100000001
+- Test Input: inp_bit = 1,0,1,1,1,0,1,1,1,0,1,1,1,0
+- Expected Output: seq_seen = 0,0,0,0,1,0,0,0,1,0,0,0,0,1 
+- Observed Output in the DUT seq_seen=0,0,0,0,1,0,0,0,0,0,0,0,1
 
 ![image](https://user-images.githubusercontent.com/92357357/180616298-d93869ca-f01e-4d75-9886-9a5705f03e4c.png)
 
 ## Test Scenario2
 
-- Test Input:  1010110110110
-- Expected Output: seq_seen = 0000001000000 
-- Observed Output in the DUT seq_seen=000000000000
+- Test Input: inp_bit= 1,0,1,0,1,1,0,1,1,0,1,1,0
+- Expected Output: seq_seen = 0,0,0,0,0,0,1,0,0,0,0,0,0 
+- Observed Output in the DUT seq_seen=0,0,0,0,0,0,0,0,0,0,0,0
 ![image](https://user-images.githubusercontent.com/92357357/180617932-133f2b6a-b106-44dc-ba0d-1091eb782041.png)
 
 ## Test Senario3
-- Test Input:  110111011
-- Expected Output: seq_seen = 0000010001 
-- Observed Output in the DUT seq_seen=000000001
+- Test Input: inp_bit = 1,1,0,1,1,1,0,1,1
+- Expected Output: seq_seen = 0,0,0,0,0,1,0,0,0,1 
+- Observed Output in the DUT seq_seen= 0,0,0,0,0,0,0,0,1
 - 
 ![image](https://user-images.githubusercontent.com/92357357/180618575-e34b3641-40dc-4b3e-a3b7-471ad8904626.png)
 
