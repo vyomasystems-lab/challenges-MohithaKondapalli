@@ -7,7 +7,7 @@ The verification environment is setup using [Vyoma's UpTickPro](https://vyomasys
 
 ## Verification Environment
 
-The [CoCoTb](https://www.cocotb.org/) based Python test is developed as explained. The test drives random inputs to the Design Under Test (mux) which takes in 2-bit random inputs for each of 31 inputs and 5-bit random input for *sel* and gives 2-bit output *out* based on the sel input
+The [CoCoTb](https://www.cocotb.org/) based Python test is developed as explained. The test drives input bit on every positive egde of the clk to the Design Under Test (seq_detect_1011) which takes in 1-bit input for *inp_bit* and gives an 1-bit output *seq_seen" when a 1011 sequencce is seen on the inp_bit 
 
 The values are assigned to the input port using 
 ```
@@ -65,10 +65,10 @@ Based on the above test input and analysing the design, we see the following bug
 ```
  SEQ_1011:
       begin
-        next_state = IDLE;    ====>BUG
+        next_state = IDLE;    ====>BUG1
       end
 ```
-In the  design, when the FSM is in SEQ_1011. If inp_bit = 1 it should go to SEQ_1 state but here its is going to IDLE state irrespective of the input hence adjacent sequence is not detected.
+In the  design, when the current_state is SEQ_1011. If inp_bit = 1 it should go to SEQ_1 state but here its is going to IDLE state irrespective of the input hence adjacent sequence after the first sequence is not being detected.
 
 2.
 ```
@@ -77,24 +77,24 @@ SEQ_101:
         if(inp_bit == 1)
           next_state = SEQ_1011;
         else
-          next_state = IDLE;   ===>BUG
+          next_state = IDLE;   ===>BUG2
       end
  ```       
-When FSM is in SEQ_101 state. if input is 1 it shold goto next state i.e, SEQ_1011 otherwise it should go to SEQ_1 but here its going to IDLE state
+When current_state is SEQ_101=. if input is 1 it should goto next state i.e, SEQ_1011 otherwise it should go to SEQ_1 but here its going to IDLE state
 
 3.
 ```
  SEQ_1:
       begin
         if(inp_bit == 1)
-          next_state = IDLE;   ===>BUG
+          next_state = IDLE;   ===>BUG3
         else
           next_state = SEQ_10;
   ```        
- When FSM is in state SEQ_1 . if input 1s 1 then it should remain in the same state but here next_state is IDLE.
+ When current_state is state SEQ_1 . if input is 1 then it should remain in the same state but here next_state is IDLE.
 
 ## Design Fix
-Updated the design for testsenario and issues are fixed
+Updated the design for each testsenario and issues are fixed
 
 ![image](https://user-images.githubusercontent.com/92357357/180617803-ed161508-cfa2-4ea7-868f-230da5e37c57.png)
 
@@ -106,7 +106,7 @@ Updated The design according to test senario3 and the issue is fixed
 
 ![image](https://user-images.githubusercontent.com/92357357/180618778-789cb0b9-ba6a-4457-9bef-6cfc30afba00.png)
 
-Upon running the testcases with random input bit after the design fix 
+Upon running all the above testcases and a selfchecking testcase with python logic similar to the design with random input bit after the design fix 
 
 ![image](https://user-images.githubusercontent.com/92357357/180638687-52aca1b2-83fa-476b-85b2-3fbfd2d3e75e.png)
 
@@ -155,5 +155,8 @@ always @(inp_bit or current_state)
 The updated design is checked in as level1_design2_bugfree/seq_detect_1011_fix.v
 
 ## Verification Strategy
+
+Initially a simple testcase with single sequence in in the inp_bit is choosen to understand the working of design with the generated output, current_state and next_state values. As the initial testcase failed i have gone though the design and on analyzing the values generated i was able to figure out a bug and fix it. I choose few testcases like overlapping sequence(1010110110110), adjusant sequence(10111011101110). A pattern with no sequence in it is also verified to make sure that the design is giving the expected output even though seqence is not found and upon executing all the above testcase i was able to detect and fix the bugs based on the output, currentstate, nextstate values. 
+A self_checking testcase with python logic similar to the working of the design is inserted to verify the design in maximum possible cases.
 
 ## Is the verification complete ?
