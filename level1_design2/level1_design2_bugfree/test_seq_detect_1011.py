@@ -294,7 +294,7 @@ async def test_seq_random(dut):
 
     cocotb.log.info('#### CTB: Develop your test here! ######')
     queue = []
-    l = random.randint(1,30)
+    l = random.randint(1,100)
     print(l)
     for i in range(0,l):
         await RisingEdge(dut.clk)
