@@ -35,7 +35,7 @@ def run_test(dut):
     ######### CTB : Modify the test to expose the bug #############
     # input transaction
 
-    count = 0   # varaible is used to count the errors 
+     
 
 
     #list of all the instructions
@@ -49,6 +49,7 @@ def run_test(dut):
     0x61901013, 0x61a01013, 0xa001013, 0xa003033, 0xa002033, 0xa004033, 0xa005033, 0xa006033, 0xa007033, 0x48006033, 0x8006033,
     0x8004033, 0x48004033, 0x8007033, 0x8001033, 0x8005033, 0x8001013, 0x8005013, 0x48007033, random.getrandbits(32)]
     for i in range(0,100):
+        count = 0   # varaible is used to count the errors for each combination
         mav_putvalue_src1 =  random.getrandbits(32) 
         dut._log.info(f'mav_putvalue_src1={hex(mav_putvalue_src1)}')
         mav_putvalue_src2 = random.getrandbits(32) 
@@ -85,6 +86,7 @@ def run_test(dut):
                 count = count+1
             else:
                 count = count
+        dut._log.info(f'error count = {count}') 
     
             
 
