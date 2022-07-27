@@ -1,5 +1,5 @@
 
-# MUX Design Verification
+# Bitmanip co-processor Verification
 
 The verification environment is setup using [Vyoma's UpTickPro](https://vyomasystems.com) provided for the hackathon.
 
@@ -8,138 +8,62 @@ The verification environment is setup using [Vyoma's UpTickPro](https://vyomasys
 
 ## Verification Environment
 
-The [CoCoTb](https://www.cocotb.org/) based Python test is developed as explained. The test drives inputs values to the Design Under Test (31-to -1 mux) which takes in 5-bit random input for *sel* 2-bit random inputs for each of the inputs *inp0-inp30 and gives 2-bit output *out* based on the sel input.
-
+The [CoCoTb](https://www.cocotb.org/) based Python test is developed as explained. The test drives four inputs values to the Design Under Test (bitmanip co-processor) which takes in 32-bit input for each *mav_putvalue_instr* , *mav_putvalue_src1*, *mav_putvalue_src2*, *mav_putvalue_src3* and perform the operation on mav_putvalue_src1, mav_putvalue_src2, mav_putvalue_src3 based on mav_putvalue_instr provided and gives an 33 bit output *mav_putvalue* indicating result and valid bit.
 The values are assigned to the input port using 
 ```
-dut.sel.value = random.getrandbits(31)
-dut.inp0.value = random.getrandbits(1) 
-dut.inp1.value = random.getrandbits(1)
-.
-.
-.
-dut.inp31.value= random.ranint(1,3)
+mav_putvalue_src1 =  random.getrandbits(32) 
+mav_putvalue_src2 = random.getrandbits(32) 
+mav_putvalue_src3 = random.getrandbits(32) 
+mav_putvalue_instr = val [val is one of the value from list of instructions provided]
 ```
 
-The assert statement is used for comparing the mux output to the expected value.
+The if-else statement is used for comparing the mux output to the expected value 
 
 ```
-assert out == dut.out.value,"the expected output for input sel line {sel} is {expected} but the design value is {output}".format(
-                sel=dut.sel.value, expected = out, output= dut.out.value)
+if(dut_output != expected_mav_putvalue):
+                error_message = f'Value mismatch DUT = {bin(dut_output)} does not match MODEL = {hex(expected_mav_putvalue)} when instruction is mav_putvalue_instr = {hex(mav_putvalue_instr)} '
 ```
 
 
 The following errors are seen on running the test:
 ```
-assert out == dut.out.value ,"the expected output for input sel line {sel} is {expected} but the design value is {output}".format(
-                     AssertionError: the expected output for input sel line 01100 is 11 but the design value is 00
+Value mismatch DUT = 0x4b0860b does not match MODEL = 0x280270c1 when instruction is mav_putvalue_instr = 0x40007033 
+Value mismatch DUT = 0x1cacb9944 does not match MODEL = 0x0 when instruction is mav_putvalue_instr = 0x40007033
                     
-assert out == dut.out.value ,"the expected output for input sel line {sel} is {expected} but the design value is {output}".format(
-                     AssertionError: the expected output for input sel line 01101 is 11 but the design value is 10
-
-assert out == dut.out.value ,"the expected output for input sel line {sel} is {expected} but the design value is {output}".format(
-                     AssertionError: the expected output for input sel line 11110 is 01 but the design value is 00
-
-
 ```
-## Test Scenario1 
-- Test Inputs: sel = 01100, inp12 = 11
-- Expected Output: out = 11
-- Observed Output in the DUT dut.out=00
-![image](https://user-images.githubusercontent.com/92357357/180450336-ddba2411-9d4b-49fd-b626-2e19b0839410.png)
+## Test Scenario1
+ random values are assigned to mav_putvalue_src1, mav_putvalue_src2, mav_putvalue_src3 and mav_putvalue_instr is assigned to ``ANDN`` instruction 
+
+- Test Inputs:  mav_putvalue_src1, mav_putvalue_src2, mav_putvalue_src3 and mav_putvalue_instr is assigned to ``ANDN`` instruction = 0x16597b65, mav_putvalue_src2 = 0x4258c31f, mav_putvalue_src3 = 0x2fd6e045, mav_putvalue_instr = 0x40007033
+- Expected Output: expected_mav_putvalue = 0x280270c1
+- Observed output: dut_output = 0x4b0860b 
+
+![image](https://user-images.githubusercontent.com/92357357/181343462-d0d7eae4-b635-4a87-b602-d98dc02ff959.png)
 
 ## Test Scenario2
-- Test Inputs: sel = 01101, inp13 = 11
-- Expected Output: out = 11
-- Observed Output in the DUT dut.out=10
+ Random values are assigned to mav_putvalue_src1, mav_putvalue_src2, mav_putvalue_src3 and mav_putvalue_instr is assigned to some invalid instruction 
+ 
+- Test Inputs:  mav_putvalue_src1 = 0xe565cca2, mav_putvalue_src2 = 0xf5829c9b, mav_putvalue_src3 = 0x26bac0da, mav_putvalue_instr = 0x4002023
+- Expected Output: expected_mav_putvalue = 0x0
+- Observed output: dut_output = 0x1cacb9944
 
-This senario appears because in one of the case statement output is assigned to inp12 when sel = 13 ``5'b01101: out = inp12;``
-![image](https://user-images.githubusercontent.com/92357357/180827666-681b5d58-3b91-4503-9800-d6408b3f65fc.png)
+![image](https://user-images.githubusercontent.com/92357357/181344234-ff08626e-1401-4bfd-ac4c-df94eb89628a.png)
 
 ## Test Scenario3
-- Test Inputs: sel = 11110, inp30 = 01
-- Expected Output: out = 01
-- Observed Output in the DUT dut.out=00
+All the instructions provided in the python model is performed on each combination of src1, src2, src3(these values are generated for a certain rage using for loop) and the value mismatch is seen when ``ANDN`` and ``INVALID`` instructions are provided.
+![image](https://user-images.githubusercontent.com/92357357/181347015-6a141042-3005-498c-b138-fb02ffbcb0f4.png)
 
-This senario appears as there is no case statement written in the design for sel input 30
-![image](https://user-images.githubusercontent.com/92357357/180833612-096e0c3a-c8b9-40b3-a39f-0fe7e37ac3e3.png)
-
-
-Output mismatches for the above inputs proves that there are two design bugs
+From the above test scenarios it is detected that the design is failing for ``ANDN`` instruction and according to python model provided when an ``INVALID`` instruction is provided the expected output should be zero but it is returing some value.
+Output mismatches for the above inputs proves that there are bugs in the  design
 
 ## Design Bugs
-Based on the above test input and analysing the design, we see the following bugs
 
-```
-5'b01010: out = inp10;
-5'b01011: out = inp11;
-5'b01101: out = inp12;        ====>BUG1
-5'b01101: out = inp13;
-5'b01110: out = inp14;
-```
-In the  design, the case statement for  inp12 is ``5'b01101: out = inp12``  it should be ``5'b01100 : out = inp12``
-
-```
-5'b11011: out = inp27;
-5'b11100: out = inp28;
-5'b11101: out = inp29;      ====>need to add case for sel input 30
-default: out = 0;
-```
-In the  design, the case statement for sel input 11110 is not defined. hence it is giving the default output value 00, it should be defined as ``5'b11110 : out = inp30`` . 
 
 
 ## Design Fix
-Updating the design and re-running the test makes the test pass.
 
-![image](https://user-images.githubusercontent.com/92357357/180451446-7e2b312a-49a6-4f17-ae8e-e74065a34447.png)
-
-
-Updated design
- case(sel)
-      5'b00000: out = inp0;  
-      5'b00001: out = inp1;  
-      5'b00010: out = inp2;  
-      5'b00011: out = inp3;  
-      5'b00100: out = inp4;  
-      5'b00101: out = inp5;  
-      5'b00110: out = inp6;  
-      5'b00111: out = inp7;  
-      5'b01000: out = inp8;  
-      5'b01001: out = inp9;  
-      5'b01010: out = inp10;
-      5'b01011: out = inp11;
-      5'b01100: out = inp12;       ====>changed
-      5'b01101: out = inp13;
-      5'b01110: out = inp14;
-      5'b01111: out = inp15;
-      5'b10000: out = inp16;
-      5'b10001: out = inp17;
-      5'b10010: out = inp18;
-      5'b10011: out = inp19;
-      5'b10100: out = inp20;
-      5'b10101: out = inp21;
-      5'b10110: out = inp22;
-      5'b10111: out = inp23;
-      5'b11000: out = inp24;
-      5'b11001: out = inp25;
-      5'b11010: out = inp26;
-      5'b11011: out = inp27;
-      5'b11100: out = inp28;
-      5'b11101: out = inp29;
-      5'b11110: out = inp30;     ======>added
-      default: out = 0;
-    endcase
-    
-    
-
-
-The updated design is checked in as level1_design1/level1_design1_bugfree/mux_fix.v
 
 ## Verification Strategy
-
-I used a for loop and assigned random values to all the inputs. If loops are used within the for loop to define the model of design and an assert statement is used to expose the bug in the design by comapring the expected and the actual output value, on running the test its gets terminated if error is detected. so when any error is detected i have go through the output values and the expected values to analyze the design and made changes in the design accordingly and made sure that the design is working properly now . The process is repeated until all the bugs are found and resolved and made sure that the design is covering all the possible input values as its a simple design.
+Initially a random set of inputs are assigned to each of src1, src2, src3 and checked if the design is working properly for each instruction provided on the particular combination. Later to make the task simple a test case with a list of instructions is assigned to a variabel and random inputs for src1, src2, src3 are generated till the certain range and each instruction from the provided list is performed on each set of combination and the failure of the design for ``  ANDN`` and ``INVALID`` instructions are detected.  
 
 ## Is the verification complete ?
-
-The verification is complete as the test case designed is made to run on all possible input values and also made sure that the design is working properly for all the
-inputs.
