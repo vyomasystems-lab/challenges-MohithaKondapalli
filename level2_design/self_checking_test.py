@@ -44,17 +44,17 @@ def run_test(dut):
     0x68005013, 0x28005013, 0x48005013, 0x68001013, 0x28001013,0x48001013,
     0x60005013, 0x20005013, 0x20001013,
     0x68005033, 0x28005033, 0x48005033, 0x68001033, 0x28001033, 0x48001033,
-    0x60005033, 0x60001033, 0x20005033, 0x20001033, 0x40004033, 0x40007033, 0x40006033, 0x00001111, 0x20004033, 0x20005033,
+    0x60005033, 0x60001033, 0x20005033, 0x20001033, 0x40004033, 0x40007033, 0x40006033, 0x20004033, 0x20005033,
     0x20006033, 0x60001013, 0x60101013, 0x60201013, 0x60401013, 0x60501013, 0x61001013, 0x61101013, 0x61201013, 0x61801013,
     0x61901013, 0x61a01013, 0xa001013, 0xa003033, 0xa002033, 0xa004033, 0xa005033, 0xa006033, 0xa007033, 0x48006033, 0x8006033,
-    0x8004033, 0x48004033, 0x8007033, 0x8001033, 0x8005033, 0x8001013, 0x8005013, 0x48007033]
+    0x8004033, 0x48004033, 0x8007033, 0x8001033, 0x8005033, 0x8001013, 0x8005013, 0x48007033, random.getrandbits(32)]
     for i in range(0,100):
         mav_putvalue_src1 =  random.getrandbits(32) 
-        #dut._log.info(f'mav_putvalue_src1={hex(mav_putvalue_src1)}')
+        dut._log.info(f'mav_putvalue_src1={hex(mav_putvalue_src1)}')
         mav_putvalue_src2 = random.getrandbits(32) 
-        #dut._log.info(f'mav_putvalue_src2={hex(mav_putvalue_src2)}')
+        dut._log.info(f'mav_putvalue_src2={hex(mav_putvalue_src2)}')
         mav_putvalue_src3 = random.getrandbits(32) 
-        #dut._log.info(f'mav_putvalue_src3={hex(mav_putvalue_src3)}')
+        dut._log.info(f'mav_putvalue_src3={hex(mav_putvalue_src3)}')
 
         for val in list1:
             mav_putvalue_instr = val
@@ -80,7 +80,7 @@ def run_test(dut):
 
             # comparison
             if(dut_output != expected_mav_putvalue):
-                error_message = f'Value mismatch DUT = {bin(dut_output)} does not match MODEL = {hex(expected_mav_putvalue)} when instruction is mav_putvalue_instr = {hex(mav_putvalue_instr)} '
+                error_message = f'Value mismatch DUT = {hex(dut_output)} does not match MODEL = {hex(expected_mav_putvalue)} when instruction is mav_putvalue_instr = {hex(mav_putvalue_instr)} '
                 print(error_message)
                 count = count+1
             else:
@@ -89,5 +89,5 @@ def run_test(dut):
             
 
 
-    print(count)  
+    dut._log.info(f'error count = {count}')  
     assert count == 0, "Failed as error_count > 0"
