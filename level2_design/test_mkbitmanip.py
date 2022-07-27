@@ -40,7 +40,7 @@ def run_test(dut):
     dut._log.info(f'mav_putvalue_src2={hex(mav_putvalue_src2)}')
     mav_putvalue_src3 = random.getrandbits(32) #0x0
     dut._log.info(f'mav_putvalue_src3={hex(mav_putvalue_src3)}')
-    mav_putvalue_instr = 0x4005013
+    mav_putvalue_instr =0x8005013
     dut._log.info(f'mav_putvalue_instr={hex(mav_putvalue_instr)}')
 
     # expected output from the model
