@@ -24,7 +24,7 @@ def clock_gen(signal):
 # Sample Test
 
 @cocotb.test()
-async def run_test(dut):
+def run_test(dut):
 
     # clock
    # cocotb.fork(clock_gen(dut.clk))
@@ -46,21 +46,21 @@ async def run_test(dut):
     dut.MODE.value = MODE
     dut.data_in_to_master.value = data_in_to_master
     dut.data_in_slave1.value = data_in_slave1
-    await Timer(10, units = 'ns')
+    yield Timer(10, units = 'ns')
     reset = 0b0
     dut.reset.value = reset
-    await Timer(10, units = 'ns')
+    yield Timer(10, units = 'ns')
     CS = 0b01
     dut.CS.value = CS
     RW = 0b11
     dut.RW.value = RW
     
-    await Timer(1000, units = 'ns')
+    yield Timer(1000, units = 'ns')
     
 
     print("EXPECTED OUTPUTS")
     cocotb.log.info(f'data_out_from_master={bin(data_in_slave1)}, data_out_slave1 = {bin(data_in_to_master)}')
-    await Timer(10)
+    yield Timer(10)
     CS = 0b00
     dut.CS.value = CS
     cocotb.log.info(f'data_out_from_master={dut.data_out_from_master}, data_out_slave1 = {dut.data_out_slave1}')    
