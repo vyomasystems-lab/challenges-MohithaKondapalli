@@ -19,7 +19,7 @@ module SPI_Master // Mode 0 -> CPOL=0,CPHA=0 -> data sampled on rising edge and 
 	output wire sreset;//to be sent to the salve
   output wire[1:0]sMODE;//to be sent to the salve
 //ports on the left-side
-  input   [7:0]data_in; //for TB only
+  input  [7:0]data_in; //for TB only
   output wire[7:0]data_out;//for TB only
   input  [1:0]CS;//has 4-states: 3 for the slaves and an idle state 
   input      [1:0]RW; //Read-Write, //for TB only
