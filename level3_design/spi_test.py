@@ -10,7 +10,7 @@ from cocotb.result import TestFailure
 from cocotb.clock import Clock
 
 
-
+'''
 # Clock Generation
 @cocotb.coroutine
 
@@ -20,41 +20,49 @@ def clock_gen(signal):
         yield Timer(10) 
         signal.value <= 0
         yield Timer(10) 
-
+'''
 # Sample Test
 
 @cocotb.test()
 async def run_test(dut):
 
     # clock
-    cocotb.fork(clock_gen(dut.clk))
+   # cocotb.fork(clock_gen(dut.clk))
 
     # reset
-    dut.reset.value <= 1
-    await Timer(10, units = 'ns') 
-    dut.reset.value <= 0
+    #dut.reset.value <= 1
+    #await Timer(10, units = 'ns') 
+    #dut.reset.value <= 0
 
     ######### CTB : Modify the test to expose the bug #############
     # input transaction
-    MODE = 0b01
-    dut.MODE.value = MODE
+    reset = 0b1
+    clk = 0b0
+    MODE = 0b1
     data_in_to_master = 0b10101111
-    dut.data_in_to_master.value = data_in_to_master
     data_in_slave1 = 0b11110111
+    dut.reset.value = reset
+    dut.clk.value = clk
+    dut.MODE.value = MODE
+    dut.data_in_to_master.value = data_in_to_master
     dut.data_in_slave1.value = data_in_slave1
-    await Timer(20,units='ns')
+    await Timer(10, units = 'ns')
+    reset = 0b0
+    dut.reset.value = reset
+    await Timer(10, units = 'ns')
     CS = 0b01
     dut.CS.value = CS
     RW = 0b11
-    dut.RW.VALUE = RW
+    dut.RW.value = RW
     
-
-    await Timer(120, units='ns')
-    CS = 0b00
-    dut.CS.value = CS
+    await Timer(1000, units = 'ns')
+    
 
     print("EXPECTED OUTPUTS")
     cocotb.log.info(f'data_out_from_master={bin(data_in_slave1)}, data_out_slave1 = {bin(data_in_to_master)}')
+    await Timer(10)
+    CS = 0b00
+    dut.CS.value = CS
     cocotb.log.info(f'data_out_from_master={dut.data_out_from_master}, data_out_slave1 = {dut.data_out_slave1}')    
     #cocotb.log.info(f'MOSI={bin(dut.MOSI)}, MISO1 ={bin(dut.MISO1)}')
     

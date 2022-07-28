@@ -1,5 +1,5 @@
-`include "master.sv"
-`include "slave.sv"
+`include "Master.v"
+`include "slave.v"
 `timescale 1ns / 1ps
 module Spi_Protocol(clk, reset, data_in_to_master, data_out_from_master, data_in_slave1, data_in_slave2, data_in_slave3, data_out_slave1, data_out_slave2,data_out_slave3, CS, RW, MODE);
   
