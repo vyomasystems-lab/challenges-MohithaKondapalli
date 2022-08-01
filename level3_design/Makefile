@@ -4,9 +4,9 @@ TOPLEVEL_LANG ?= verilog
 
 PWD=$(shell pwd)
 
-VERILOG_SOURCES = $(PWD)/Spi_Protocol.v             # provide your design path
+VERILOG_SOURCES = $(PWD)/SPI_Protocol.v             # provide your design path
 
-TOPLEVEL := Spi_Protocol           # design file
+TOPLEVEL := SPI_Protocol           # design file
 #MODULE   := spi_test.py   # test file
 MODULE   := sample_test
 include $(shell cocotb-config --makefiles)/Makefile.sim
