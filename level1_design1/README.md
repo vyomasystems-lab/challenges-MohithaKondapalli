@@ -8,7 +8,7 @@ The verification environment is setup using [Vyoma's UpTickPro](https://vyomasys
 
 ## Verification Environment
 
-The [CoCoTb](https://www.cocotb.org/) based Python test is developed as explained. The test drives inputs values to the Design Under Test (31-to -1 mux) which takes in 5-bit random input for *sel* 2-bit random inputs for each of the inputs *inp0-inp30 and gives 2-bit output *out* based on the sel input.
+The [CoCoTb](https://www.cocotb.org/) based Python test is developed as explained. The test drives inputs values to the Design Under Test (31-to -1 mux) which takes in 5-bit random input for *sel* 2-bit random inputs for each of the inputs *inp0-inp30* and gives 2-bit output *out* based on the sel input.
 
 The values are assigned to the input port using 
 ```
