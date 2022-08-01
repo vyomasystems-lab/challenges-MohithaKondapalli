@@ -1,4 +1,4 @@
-module SPI_Master // Mode 0 -> CPOL=0,CPHA=0 -> data sampled on rising edge and shifted on falling edge, leading edge is the rising edge
+module Master // Mode 0 -> CPOL=0,CPHA=0 -> data sampled on rising edge and shifted on falling edge, leading edge is the rising edge
  // default value is MODE=0
 // MODE|CPOL | CPHA  | data sampled on ...edge  | data shifted out on ... edge
 // 0   | 0   |	0    |		Rising		|	Falling
