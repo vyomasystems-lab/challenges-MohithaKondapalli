@@ -1,71 +1,69 @@
-# See LICENSE.iitm for details
-# See LICENSE.vyoma for details
-
 import random
 import sys
 import cocotb
+from pathlib import Path
 from cocotb.decorators import coroutine
-from cocotb.triggers import Timer, RisingEdge
+from cocotb.triggers import Timer, RisingEdge, FallingEdge
 from cocotb.result import TestFailure
 from cocotb.clock import Clock
+from cocotb.binary import BinaryValue
+import os
+import operator
 
 
-'''
-# Clock Generation
-@cocotb.coroutine
-
-def clock_gen(signal):
-    while True:
-        signal.value <= 1
-        yield Timer(10) 
-        signal.value <= 0
-        yield Timer(10) 
-'''
-# Sample Test
 
 @cocotb.test()
-def run_test(dut):
+async def test(dut):
+    passed_testcases = 0
+    await Timer(1, units = 'ns')
+   
 
-    # clock
-   # cocotb.fork(clock_gen(dut.clk))
-
-    # reset
-    #dut.reset.value <= 1
-    #await Timer(10, units = 'ns') 
-    #dut.reset.value <= 0
-
-    ######### CTB : Modify the test to expose the bug #############
-    # input transaction
-    reset = 0b1
-    clk = 0b0
-    MODE = 0b1
-    data_in_to_master = 0b10101111
-    data_in_slave1 = 0b11110111
-    dut.reset.value = reset
-    dut.clk.value = clk
-    dut.MODE.value = MODE
-    dut.data_in_to_master.value = data_in_to_master
-    dut.data_in_slave1.value = data_in_slave1
-    yield Timer(10, units = 'ns')
-    reset = 0b0
-    dut.reset.value = reset
-    yield Timer(10, units = 'ns')
-    CS = 0b01
-    dut.CS.value = CS
-    RW = 0b11
-    dut.RW.value = RW
+    clock = Clock(dut.clk, 5, units="ns")  # Create a 10us period clock on port clk
+    cocotb.fork(clock.start()) 
+    cocotb.log.info('Hey Master send data to slave1')
     
-    yield Timer(1000, units = 'ns')
+    dut.reset.value = 0b0
+    dut.MODE.value = 0b01
+    input_vector = 0b10101010
+    input_vector1 = 0b11100111
+    input_vector2 = 0b11100111
+    input_vector3 = 0b11100111
+    dut.data_in_to_master.value =input_vector
+    dut.data_in_slave1.value =input_vector1
+    dut.data_in_slave2.value =input_vector2
+    dut.data_in_slave3.value =input_vector3
+    await Timer(1)
+    cocotb.log.info(f'Current data in Master={(dut.data_in_to_master.value)}')
+    cocotb.log.info(f'Current data in slave1={(dut.data_in_slave1.value)}')
+    cocotb.log.info(f'expected data output from Master={bin(input_vector1)}')
+    cocotb.log.info(f'expected data output from slave={bin(input_vector)}')
+    
+    
+    await RisingEdge(dut.clk)
+    dut.CS.value=0b01
+    dut.RW.value=0b11
+    await Timer(1)
+    cocotb.log.info(f'clk = {dut.clk.value},cs1bar = {dut.CS1bar.value}')
+    for i in range(9):
+        await FallingEdge(dut.clk)
+        await Timer(3, units= 'ns')
+        cocotb.log.info(f'RX_byte= {dut.MSTR.RX_byte.value}, RX_temp_byte = {dut.MSTR.RX_temp_byte.value} rx_done in master = {dut.MSTR.RX_done.value}, MISO = {dut.MSTR.MISO.value}, out = {dut.MSTR.data_out.value}')
+        
+    for i in range(19):
+        await FallingEdge(dut.clk)
+        await Timer(3, units= 'ns')
+        cocotb.log.info(f'r_data = {dut.SLV_1.R_data.value}, MOSI = {dut.SLV_1.MOSI.value}, out = {dut.SLV_1.data_out.value}')
     
 
-    print("EXPECTED OUTPUTS")
-    cocotb.log.info(f'data_out_from_master={bin(data_in_slave1)}, data_out_slave1 = {bin(data_in_to_master)}')
-    yield Timer(10)
-    CS = 0b00
-    dut.CS.value = CS
-    cocotb.log.info(f'data_out_from_master={dut.data_out_from_master}, data_out_slave1 = {dut.data_out_slave1}')    
-    #cocotb.log.info(f'MOSI={bin(dut.MOSI)}, MISO1 ={bin(dut.MISO1)}')
+    #cocotb.log.info(f'clk = {dut.clk.value},exact output data from master={(dut.data_out_from_master.value)} and exact output data from slave1 ={(dut.SLV_1.data_out.value)}');
     
-    # comparison
-    error_message = "Value mismatch" # DUT = {bin(dut_output)} does not match MODEL = {hex(expected_mav_putvalue)}'
-    assert (dut.data_out_from_master == data_in_slave1) & (dut.data_out_slave1 == data_in_to_master), error_message
+    if((dut.data_out_from_master.value == input_vector1) and (dut.data_out_slave1.value == input_vector)):
+        cocotb.log.info(" testcase #1  passed successfuly")
+        passed_testcases=passed_testcases+1
+    else:
+        cocotb.log.info("testcase #1 failed")
+    
+    #cocotb.fork(testcase1(dut, dut.clk, input_vector, input_vector1, input_vector1, input_vector))
+    dut._log.info("dut.data_into_master = %d data_in_slave1 = %d, expected master output = %d, actualdata_out_from_master = %d, expected_slave1_output = %d, dut.data_out_slave1= %d", dut.data_in_to_master.value, dut.data_in_slave1.value, input_vector1, dut.data_out_from_master.value, input_vector, dut.data_out_slave1.value) 
+    assert passed_testcases==1,"FAILED"   	
+  
