@@ -160,3 +160,4 @@ Initially a simple testcase with single sequence in in the inp_bit is choosen to
 A self_checking testcase with python logic similar to the working of the design is inserted to verify the design in maximum possible cases.
 
 ## Is the verification complete ?
+The verification is complete as the testbench developed is ran on a range of random inputs which covers all the corner cases in  the design.
