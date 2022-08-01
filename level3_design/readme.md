@@ -1,4 +1,4 @@
-# MUX Design Verification
+# SPI Protocol Verification
 
 The verification environment is setup using [Vyoma's UpTickPro](https://vyomasystems.com) provided for the hackathon.
 
@@ -7,20 +7,16 @@ The verification environment is setup using [Vyoma's UpTickPro](https://vyomasys
 
 ## Verification Environment
 
-The [CoCoTb](https://www.cocotb.org/) based Python test is developed as explained. The test drives inputs values to the Design Under Test (31-to -1 mux) which takes in 5-bit random input for *sel* 2-bit random inputs for each of the inputs *inp0-inp30 and gives 2-bit output *out* based on the sel input.
-
+The [CoCoTb](https://www.cocotb.org/) based Python test is developed as explained. The test drives inputs values to the Design Under Test which takes in 8-bit input for each *data_in_to_master*, *data_in_slave1*, *data_in_slave2*, *data_in_slave3* , 2-bit inputs *CS*, *RW*, *MODE* and *clk & reset* signals. Depending on CS, RW, MODE the communication i.e read and write between master and three slaves occur.
 The values are assigned to the input port using 
 ```
-dut.sel.value = random.getrandbits(31)
-dut.inp0.value = random.getrandbits(1) 
-dut.inp1.value = random.getrandbits(1)
-.
-.
-.
-dut.inp31.value= random.ranint(1,3)
+dut.data_in_to_master.value =0b10101010
+dut.data_in_slave1.value =0b11100111
+dut.data_in_slave2.value =0b11100111
+dut.data_in_slave3.value =0b11100111 
 ```
 
-The assert statement is used for comparing the mux output to the expected value.
+The assert statement is used for comparing the design output to the expected value.
 
 ```
 assert out == dut.out.value,"the expected output for input sel line {sel} is {expected} but the design value is {output}".format(
