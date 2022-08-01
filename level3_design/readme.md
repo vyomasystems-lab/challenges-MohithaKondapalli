@@ -26,14 +26,6 @@ if((dut.data_out_from_master.value == input_vector1) and (dut.data_out_slave1.va
 
 The following errors are seen on running the test:
 ```
-assert out == dut.out.value ,"the expected output for input sel line {sel} is {expected} but the design value is {output}".format(
-                     AssertionError: the expected output for input sel line 01100 is 11 but the design value is 00
-                    
-assert out == dut.out.value ,"the expected output for input sel line {sel} is {expected} but the design value is {output}".format(
-                     AssertionError: the expected output for input sel line 01101 is 11 but the design value is 10
-
-assert out == dut.out.value ,"the expected output for input sel line {sel} is {expected} but the design value is {output}".format(
-                     AssertionError: the expected output for input sel line 11110 is 01 but the design value is 00
 
 
 ```
